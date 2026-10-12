@@ -6,6 +6,7 @@ import Header from './components/Header'
 import Dashboard from './pages/Dashboard'
 import Projects from './pages/Projects'
 import ProjectForm from './components/ProjectForm'
+import Settings from './pages/Settings'
 
 import { useProjects } from './hooks/useProjects'
 import type { ProjectInput } from './hooks/useProjects'
@@ -16,11 +17,10 @@ import type {
   StatusFilter,
 } from './components/ProjectFilters'
 
-type Page = 'dashboard' | 'projects'
+type Page = 'dashboard' | 'projects' | 'settings'
 
 export default function App() {
   const [activePage, setActivePage] = useState<Page>('dashboard')
-
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<Project | null>(null)
 
@@ -34,12 +34,14 @@ export default function App() {
   const [statusFilter, setStatusFilter] =
     useState<StatusFilter>('All')
 
-  // CRUD + LocalStorage
+  // CRUD and LocalStorage
   const {
     projects,
     addProject,
     updateProject,
     deleteProject,
+    importProjects,
+    clearProjects,
   } = useProjects()
 
   // Search and filter results
@@ -70,26 +72,24 @@ export default function App() {
     return matchesSearch && matchesCategory && matchesStatus
   })
 
-  // Reset filters and search
   const resetFilters = () => {
     setSearchQuery('')
     setCategoryFilter('All')
     setStatusFilter('All')
   }
 
-  // Add project
+  // Create
   const handleAddProject = () => {
     setEditingProject(null)
     setIsFormOpen(true)
   }
 
-  // Edit project
+  // Update
   const handleEditProject = (project: Project) => {
     setEditingProject(project)
     setIsFormOpen(true)
   }
 
-  // Save project
   const handleSaveProject = (data: ProjectInput) => {
     if (editingProject) {
       updateProject(editingProject.id, data)
@@ -101,16 +101,20 @@ export default function App() {
     setEditingProject(null)
   }
 
-  // Close form
   const handleCancel = () => {
     setIsFormOpen(false)
     setEditingProject(null)
   }
 
-  return (
-    
-      <div className="min-h-screen bg-[#0b1120] text-white md:flex">
+  const pageTitle =
+    activePage === 'dashboard'
+      ? 'Dashboard'
+      : activePage === 'projects'
+        ? 'Projects'
+        : 'Settings'
 
+  return (
+    <div className="min-h-screen bg-[#0b1120] text-white md:flex">
       <Sidebar
         activePage={activePage}
         onNavigate={setActivePage}
@@ -118,7 +122,7 @@ export default function App() {
 
       <div className="min-w-0 flex-1">
         <Header
-          title={activePage === 'dashboard' ? 'Dashboard' : 'Projects'}
+          title={pageTitle}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
         />
@@ -129,9 +133,10 @@ export default function App() {
             filteredProjects={filteredProjects}
             onAddProject={handleAddProject}
           />
-        ) : (
+        ) : activePage === 'projects' ? (
           <Projects
             projects={filteredProjects}
+            totalProjects={projects.length}
             onAdd={handleAddProject}
             onEdit={handleEditProject}
             onDelete={deleteProject}
@@ -140,8 +145,12 @@ export default function App() {
             onCategoryChange={setCategoryFilter}
             onStatusChange={setStatusFilter}
             onResetFilters={resetFilters}
-            totalProjects={projects.length}
-
+          />
+        ) : (
+          <Settings
+            projects={projects}
+            onImport={importProjects}
+            onClear={clearProjects}
           />
         )}
       </div>

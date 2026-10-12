@@ -1,18 +1,21 @@
 
 import { useState } from 'react'
+
 import {
   BrainCircuit,
   LayoutDashboard,
   FolderKanban,
-  Settings,
+  Settings as SettingsIcon,
   Sparkles,
   Menu,
   X,
 } from 'lucide-react'
 
+type Page = 'dashboard' | 'projects' | 'settings'
+
 interface SidebarProps {
-  activePage: 'dashboard' | 'projects'
-  onNavigate: (page: 'dashboard' | 'projects') => void
+  activePage: Page
+  onNavigate: (page: Page) => void
 }
 
 export default function Sidebar({
@@ -21,13 +24,21 @@ export default function Sidebar({
 }: SidebarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const navigate = (page: 'dashboard' | 'projects') => {
+  const navigate = (page: Page) => {
     onNavigate(page)
     setIsMenuOpen(false)
   }
 
+  const navigationStyle = (page: Page) =>
+    `flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-sm transition ${
+      activePage === page
+        ? 'bg-indigo-500/15 text-indigo-300'
+        : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+    }`
+
   return (
     <aside className="w-full shrink-0 border-b border-slate-800 bg-[#0d1424] md:min-h-screen md:w-64 md:border-b-0 md:border-r">
+
       <div className="flex items-center justify-between p-5">
         <div className="flex items-center gap-3">
           <div className="rounded-xl bg-indigo-500/15 p-3 text-indigo-400">
@@ -65,15 +76,12 @@ export default function Sidebar({
         </p>
 
         <nav className="flex flex-col gap-2" aria-label="Main navigation">
+
           <button
             type="button"
             onClick={() => navigate('dashboard')}
             aria-current={activePage === 'dashboard' ? 'page' : undefined}
-            className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm transition ${
-              activePage === 'dashboard'
-                ? 'bg-indigo-500/15 text-indigo-300'
-                : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-            }`}
+            className={navigationStyle('dashboard')}
           >
             <LayoutDashboard size={18} />
             Dashboard
@@ -83,28 +91,37 @@ export default function Sidebar({
             type="button"
             onClick={() => navigate('projects')}
             aria-current={activePage === 'projects' ? 'page' : undefined}
-            className={`flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm transition ${
-              activePage === 'projects'
-                ? 'bg-indigo-500/15 text-indigo-300'
-                : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-            }`}
+            className={navigationStyle('projects')}
           >
             <FolderKanban size={18} />
             Projects
           </button>
+
+          <button
+            type="button"
+            onClick={() => navigate('settings')}
+            aria-current={activePage === 'settings' ? 'page' : undefined}
+            className={navigationStyle('settings')}
+          >
+            <SettingsIcon size={18} />
+            Settings
+          </button>
+
         </nav>
 
         <div className="mt-8 rounded-xl border border-indigo-500/20 bg-indigo-500/10 p-4">
-          <Sparkles className="mb-2 text-indigo-400" size={22} />
-          <p className="font-semibold text-white">AI Workspace</p>
+          <Sparkles
+            className="mb-2 text-indigo-400"
+            size={22}
+          />
+
+          <p className="font-semibold text-white">
+            AI Workspace
+          </p>
+
           <p className="mt-1 text-xs text-slate-400">
             Build, organize and track your AI innovations.
           </p>
-        </div>
-
-        <div className="mt-6 flex items-center gap-3 text-sm text-slate-500">
-          <Settings size={18} />
-          <span>Settings (Coming soon)</span>
         </div>
       </div>
     </aside>

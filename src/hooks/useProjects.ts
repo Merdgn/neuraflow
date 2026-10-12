@@ -77,10 +77,34 @@ export function useProjects() {
     )
   }
 
-  return {
-    projects,
-    addProject,
-    updateProject,
-    deleteProject,
-  }
+  
+function importProjects(importedProjects: Project[]) {
+  setProjects((current) => {
+    const existingIds = new Set(
+      current.map((project) => project.id)
+    )
+
+    const newProjects = importedProjects.filter(
+      (project) => !existingIds.has(project.id)
+    )
+
+    return [...current, ...newProjects]
+  })
+}
+
+function clearProjects() {
+  setProjects([])
+}
+
+
+  
+return {
+  projects,
+  addProject,
+  updateProject,
+  deleteProject,
+  importProjects,
+  clearProjects,
+}
+
 }
