@@ -9,6 +9,8 @@ import ProjectForm from './components/ProjectForm'
 import Settings from './pages/Settings'
 
 import { useProjects } from './hooks/useProjects'
+import { useNotifications } from './hooks/useNotifications'
+
 import type { ProjectInput } from './hooks/useProjects'
 import type { Project } from './interfaces/Project'
 
@@ -20,7 +22,10 @@ import type {
 type Page = 'dashboard' | 'projects' | 'settings'
 
 export default function App() {
+  // Navigation
   const [activePage, setActivePage] = useState<Page>('dashboard')
+
+  // Project form
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<Project | null>(null)
 
@@ -34,7 +39,7 @@ export default function App() {
   const [statusFilter, setStatusFilter] =
     useState<StatusFilter>('All')
 
-  // CRUD and LocalStorage
+  // Project management
   const {
     projects,
     addProject,
@@ -44,7 +49,17 @@ export default function App() {
     clearProjects,
   } = useProjects()
 
-  // Search and filter results
+  // Notification management
+  const {
+    notifications,
+    unreadCount,
+    addNotification,
+    markAsRead,
+    markAllAsRead,
+    clearNotifications,
+  } = useNotifications()
+
+  // Search and filtering
   const filteredProjects = projects.filter((project) => {
     const query = searchQuery.trim().toLocaleLowerCase('tr-TR')
 
@@ -72,40 +87,116 @@ export default function App() {
     return matchesSearch && matchesCategory && matchesStatus
   })
 
+  // Reset filters
   const resetFilters = () => {
     setSearchQuery('')
     setCategoryFilter('All')
     setStatusFilter('All')
   }
 
-  // Create
+  // Open new project form
   const handleAddProject = () => {
     setEditingProject(null)
     setIsFormOpen(true)
   }
 
-  // Update
+  // Open edit form
   const handleEditProject = (project: Project) => {
     setEditingProject(project)
     setIsFormOpen(true)
   }
 
+  // Create or update a project
   const handleSaveProject = (data: ProjectInput) => {
     if (editingProject) {
       updateProject(editingProject.id, data)
+
+      addNotification(
+        'Project updated',
+        `"${data.name}" was updated successfully.`,
+        'info'
+      )
     } else {
       addProject(data)
+
+      addNotification(
+        'Project created',
+        `"${data.name}" was added to your workspace.`,
+        'success'
+      )
     }
 
     setIsFormOpen(false)
     setEditingProject(null)
   }
 
+  // Delete a project after confirmation
+  const handleDeleteProject = (id: string) => {
+    const projectToDelete = projects.find(
+      (project) => project.id === id
+    )
+
+    if (!projectToDelete) return
+
+    deleteProject(id)
+
+    addNotification(
+      'Project deleted',
+      `"${projectToDelete.name}" was removed from your workspace.`,
+      'warning'
+    )
+  }
+
+  // Import projects from JSON
+  const handleImportProjects = (imported: Project[]) => {
+    const existingIds = new Set(
+      projects.map((project) => project.id)
+    )
+
+    const uniqueImportedIds = new Set<string>()
+    let newCount = 0
+
+    for (const project of imported) {
+      if (
+        !existingIds.has(project.id) &&
+        !uniqueImportedIds.has(project.id)
+      ) {
+        uniqueImportedIds.add(project.id)
+        newCount++
+      }
+    }
+
+    importProjects(imported)
+
+    addNotification(
+      'Projects imported',
+      `${newCount} new project(s) imported into your workspace.`,
+      'success'
+    )
+  }
+
+  // Clear workspace after confirmation in Settings
+  const handleClearWorkspace = () => {
+    const deletedCount = projects.length
+
+    if (deletedCount === 0) return
+
+    clearProjects()
+
+    addNotification(
+      'Workspace cleared',
+      `${deletedCount} project(s) were removed from your workspace.`,
+      'warning'
+    )
+  }
+
+  // Close project form
   const handleCancel = () => {
     setIsFormOpen(false)
     setEditingProject(null)
   }
 
+  // Header title
   const pageTitle =
     activePage === 'dashboard'
       ? 'Dashboard'
@@ -125,6 +216,12 @@ export default function App() {
           title={pageTitle}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
+          notifications={notifications}
+          unreadCount={unreadCount}
+          onMarkAsRead={markAsRead}
+          onMarkAllAsRead={markAllAsRead}
+          onClearNotifications={clearNotifications}
+          onSettingsClick={() => setActivePage('settings')}
         />
 
         {activePage === 'dashboard' ? (
@@ -139,7 +236,7 @@ export default function App() {
             totalProjects={projects.length}
             onAdd={handleAddProject}
             onEdit={handleEditProject}
-            onDelete={deleteProject}
+            onDelete={handleDeleteProject}
             categoryFilter={categoryFilter}
             statusFilter={statusFilter}
             onCategoryChange={setCategoryFilter}
@@ -149,8 +246,8 @@ export default function App() {
         ) : (
           <Settings
             projects={projects}
-            onImport={importProjects}
-            onClear={clearProjects}
+            onImport={handleImportProjects}
+            onClear={handleClearWorkspace}
           />
         )}
       </div>

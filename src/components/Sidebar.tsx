@@ -115,13 +115,16 @@ export default function Sidebar({
             size={22}
           />
 
-          <p className="font-semibold text-white">
-            AI Workspace
-          </p>
+          
+<p className="font-semibold text-white">
+  Your AI Portfolio
+</p>
 
-          <p className="mt-1 text-xs text-slate-400">
-            Build, organize and track your AI innovations.
-          </p>
+<p className="mt-1 text-xs leading-5 text-slate-400">
+  Organize your projects, monitor progress,
+  and turn ideas into innovation.
+</p>
+
         </div>
       </div>
     </aside>

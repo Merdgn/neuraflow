@@ -20,6 +20,10 @@ Built with **React, TypeScript, Vite, and Tailwind CSS**, Neuraflow provides an 
 - **Type-Safe Architecture:** Maintain structured project models using TypeScript interfaces.
 - **JSON Backup Management:** Export and import project data using JSON files.
 - **Workspace Data Management:** Clear locally stored projects with confirmation.
+- **Smart In-App Notifications:** Receive notifications when projects are created, updated, deleted, or imported.
+- **Notification Management:** Mark notifications as read, track unread counts, and clear notification history.
+- **Persistent Notifications:** Store notifications locally across browser sessions.
+- **Guest Workspace Profile:** Access workspace information and settings through a dedicated profile menu.
 
 ## 🛠️ Technology Stack
 
@@ -52,6 +56,12 @@ Built with **React, TypeScript, Vite, and Tailwind CSS**, Neuraflow provides an 
 Manage local project data, export JSON backups, import saved projects, and clear workspace data.
 
 ![Neuraflow Workspace Settings](screenshots/settings.png)
+
+### Notification Center
+
+Track project activities, view unread notifications, and manage notification history.
+
+![Neuraflow Notification Center](screenshots/notifications.png)
 
 ## 🚀 Getting Started
 
