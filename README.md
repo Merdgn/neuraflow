@@ -18,6 +18,8 @@ Built with **React, TypeScript, Vite, and Tailwind CSS**, Neuraflow provides an 
 - **Deletion Confirmation:** Prevent accidental deletion through a custom confirmation dialog.
 - **Responsive Design:** Use the application across desktop, tablet, and mobile screens.
 - **Type-Safe Architecture:** Maintain structured project models using TypeScript interfaces.
+- **JSON Backup Management:** Export and import project data using JSON files.
+- **Workspace Data Management:** Clear locally stored projects with confirmation.
 
 ## 🛠️ Technology Stack
 
@@ -44,6 +46,12 @@ Built with **React, TypeScript, Vite, and Tailwind CSS**, Neuraflow provides an 
 ### Create Project
 
 ![Create Project](screenshots/create_project.png)
+
+### Workspace Settings
+
+Manage local project data, export JSON backups, import saved projects, and clear workspace data.
+
+![Neuraflow Workspace Settings](screenshots/settings.png)
 
 ## 🚀 Getting Started
 
