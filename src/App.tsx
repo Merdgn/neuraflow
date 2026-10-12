@@ -1,22 +1,51 @@
 
-function App() {
+import { useState } from 'react'
+import Sidebar from './components/Sidebar'
+import Header from './components/Header'
+import Dashboard from './pages/Dashboard'
+import { mockProjects } from './data/mockProjects'
+
+type Page = 'dashboard' | 'projects'
+
+export default function App() {
+  const [activePage, setActivePage] = useState<Page>('dashboard')
+
+  const handleAddProject = () => {
+    setActivePage('projects')
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950">
-      <div className="rounded-2xl border border-slate-700 bg-slate-900 p-10 text-center shadow-xl">
-        <h1 className="text-4xl font-bold text-indigo-400">
-          Neuraflow
-        </h1>
+    <div className="min-h-screen bg-[#0b1120] text-white md:flex">
+      <Sidebar
+        activePage={activePage}
+        onNavigate={setActivePage}
+      />
 
-        <p className="mt-4 text-slate-300">
-          AI Project Intelligence Workspace
-        </p>
+      <div className="min-w-0 flex-1">
+        <Header
+          title={
+            activePage === 'dashboard'
+              ? 'Dashboard'
+              : 'Projects'
+          }
+        />
 
-        <p className="mt-6 text-sm text-emerald-400">
-          React + TypeScript + Tailwind CSS
-        </p>
+        {activePage === 'dashboard' ? (
+          <Dashboard
+            projects={mockProjects}
+            onAddProject={handleAddProject}
+          />
+        ) : (
+          <div className="p-10">
+            <h2 className="text-2xl font-bold">
+              Project Management
+            </h2>
+            <p className="mt-3 text-slate-400">
+              CRUD project management is coming next.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   )
 }
-
-export default App
