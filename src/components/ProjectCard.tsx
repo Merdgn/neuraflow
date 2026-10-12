@@ -5,6 +5,13 @@ interface ProjectCardProps {
   project: Project
 }
 
+const statusStyles = {
+  Planning: 'bg-blue-500/10 text-blue-300',
+  'In Progress': 'bg-amber-500/10 text-amber-300',
+  Completed: 'bg-emerald-500/10 text-emerald-300',
+  'On Hold': 'bg-slate-500/20 text-slate-300',
+}
+
 export default function ProjectCard({ project }: ProjectCardProps) {
   return (
     <article className="rounded-2xl border border-slate-800 bg-[#151f32] p-6 transition hover:border-indigo-500/40">
@@ -12,9 +19,15 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         <div className="rounded-xl bg-indigo-500/10 p-3 text-indigo-400">
           <BrainCircuit size={23} />
         </div>
-        <span className="rounded-full bg-slate-700 px-3 py-1 text-xs text-slate-200">
-          {project.status}
-        </span>
+        
+<span
+  className={`rounded-full px-3 py-1 text-xs font-medium ${
+    statusStyles[project.status]
+  }`}
+>
+  {project.status}
+</span>
+
       </div>
 
       <h3 className="text-lg font-semibold text-white">{project.name}</h3>

@@ -108,7 +108,9 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0b1120] text-white md:flex">
+    
+      <div className="min-h-screen bg-[#0b1120] text-white md:flex">
+
       <Sidebar
         activePage={activePage}
         onNavigate={setActivePage}

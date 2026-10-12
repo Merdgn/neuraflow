@@ -96,9 +96,12 @@ export default function ProjectForm({
       role="dialog"
       aria-modal="true"
       aria-labelledby="project-form-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4"
+      
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/75 p-4 sm:items-center"
+
     >
-      <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-slate-700 bg-[#151f32] p-6 shadow-2xl md:p-8">
+      <div 
+          className="my-auto max-h-[calc(100dvh-2rem)] w-full max-w-2xl overflow-y-auto rounded-2xl border border-slate-700 bg-[#151f32] p-5 shadow-2xl sm:p-6 md:p-8">
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
             <h2
