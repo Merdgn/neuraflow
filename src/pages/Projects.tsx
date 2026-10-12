@@ -1,4 +1,7 @@
 
+import { useState } from 'react'
+import DeleteModal from '../components/DeleteModal'
+
 import { Pencil, Plus, Trash2, FolderKanban } from 'lucide-react'
 import type { Project } from '../interfaces/Project'
 
@@ -21,6 +24,8 @@ interface ProjectsProps {
   onCategoryChange: (value: CategoryFilter) => void
   onStatusChange: (value: StatusFilter) => void
   onResetFilters: () => void
+  totalProjects: number
+
 }
 
 
@@ -33,17 +38,29 @@ export default function Projects({
   statusFilter,
   onCategoryChange,
   onStatusChange,
-  onResetFilters,
-}: ProjectsProps){
-  const handleDelete = (project: Project) => {
-    const confirmed = window.confirm(
-      `Are you sure you want to delete "${project.name}"?`
-    )
+  onResetFilters, 
+  totalProjects,
 
-    if (confirmed) {
-      onDelete(project.id)
-    }
-  }
+
+}: ProjectsProps){
+  
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null)
+  
+const handleDelete = (project: Project) => {
+  setProjectToDelete(project)
+}
+
+const confirmDelete = () => {
+  if (!projectToDelete) return
+
+  onDelete(projectToDelete.id)
+  setProjectToDelete(null)
+}
+
+const cancelDelete = () => {
+  setProjectToDelete(null)
+}
+
 
   return (
     <main className="mx-auto max-w-7xl p-6 md:p-10">
@@ -83,9 +100,13 @@ export default function Projects({
               className="text-indigo-400"
             />
             <p className="text-white">No projects found</p>
-            <p className="text-sm text-slate-400">
-              Create your first AI project to get started.
-            </p>
+            
+<p className="text-sm text-slate-400">
+  {totalProjects === 0
+    ? 'Create your first AI project to get started.'
+    : 'No projects match your current search or filters.'}
+</p>
+
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -150,6 +171,15 @@ export default function Projects({
           </div>
         )}
       </div>
+      
+{projectToDelete && (
+  <DeleteModal
+    project={projectToDelete}
+    onConfirm={confirmDelete}
+    onCancel={cancelDelete}
+  />
+)}
+
     </main>
   )
 }

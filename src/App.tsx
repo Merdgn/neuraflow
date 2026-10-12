@@ -138,6 +138,8 @@ export default function App() {
             onCategoryChange={setCategoryFilter}
             onStatusChange={setStatusFilter}
             onResetFilters={resetFilters}
+            totalProjects={projects.length}
+
           />
         )}
       </div>
