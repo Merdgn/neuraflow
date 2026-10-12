@@ -5,6 +5,16 @@ import { mockProjects } from '../data/mockProjects'
 
 const STORAGE_KEY = 'neuraflow-projects'
 
+export type ProjectInput = Pick<
+  Project,
+  | 'name'
+  | 'description'
+  | 'category'
+  | 'status'
+  | 'technologies'
+  | 'progress'
+>
+
 function loadProjects(): Project[] {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
@@ -34,6 +44,33 @@ export function useProjects() {
     }
   }, [projects])
 
+  function addProject(data: ProjectInput) {
+    const now = new Date().toISOString()
+
+    const project: Project = {
+      ...data,
+      id: crypto.randomUUID(),
+      createdAt: now,
+      updatedAt: now,
+    }
+
+    setProjects((current) => [project, ...current])
+  }
+
+  function updateProject(id: string, data: ProjectInput) {
+    setProjects((current) =>
+      current.map((project) =>
+        project.id === id
+          ? {
+              ...project,
+              ...data,
+              updatedAt: new Date().toISOString(),
+            }
+          : project
+      )
+    )
+  }
+
   function deleteProject(id: string) {
     setProjects((current) =>
       current.filter((project) => project.id !== id)
@@ -42,6 +79,8 @@ export function useProjects() {
 
   return {
     projects,
+    addProject,
+    updateProject,
     deleteProject,
   }
 }
