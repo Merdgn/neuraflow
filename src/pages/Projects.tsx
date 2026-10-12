@@ -2,19 +2,39 @@
 import { Pencil, Plus, Trash2, FolderKanban } from 'lucide-react'
 import type { Project } from '../interfaces/Project'
 
+import ProjectFilters from '../components/ProjectFilters'
+import type {
+  CategoryFilter,
+  StatusFilter,
+} from '../components/ProjectFilters'
+
+
+
 interface ProjectsProps {
   projects: Project[]
   onAdd: () => void
   onEdit: (project: Project) => void
   onDelete: (id: string) => void
+
+  categoryFilter: CategoryFilter
+  statusFilter: StatusFilter
+  onCategoryChange: (value: CategoryFilter) => void
+  onStatusChange: (value: StatusFilter) => void
+  onResetFilters: () => void
 }
+
 
 export default function Projects({
   projects,
   onAdd,
   onEdit,
   onDelete,
-}: ProjectsProps) {
+  categoryFilter,
+  statusFilter,
+  onCategoryChange,
+  onStatusChange,
+  onResetFilters,
+}: ProjectsProps){
   const handleDelete = (project: Project) => {
     const confirmed = window.confirm(
       `Are you sure you want to delete "${project.name}"?`
@@ -45,6 +65,15 @@ export default function Projects({
           New Project
         </button>
       </div>
+      
+<ProjectFilters
+  category={categoryFilter}
+  status={statusFilter}
+  resultCount={projects.length}
+  onCategoryChange={onCategoryChange}
+  onStatusChange={onStatusChange}
+  onReset={onResetFilters}
+/>
 
       <div className="overflow-hidden rounded-2xl border border-slate-800 bg-[#151f32]">
         {projects.length === 0 ? (

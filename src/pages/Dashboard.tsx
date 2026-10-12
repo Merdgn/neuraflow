@@ -4,15 +4,21 @@ import type { Project } from '../interfaces/Project'
 import ProjectCard from '../components/ProjectCard'
 import StatCard from '../components/StatCard'
 
+
 interface DashboardProps {
   projects: Project[]
+  filteredProjects: Project[]
   onAddProject: () => void
 }
 
+
+
 export default function Dashboard({
   projects,
+  filteredProjects,
   onAddProject,
 }: DashboardProps) {
+ {
   const activeCount = projects.filter(
     (project) => project.status === 'In Progress'
   ).length
@@ -69,13 +75,17 @@ export default function Dashboard({
           </p>
         </div>
 
-        {projects.length === 0 ? (
+        {filteredProjects.length === 0 ? (
           <p className="rounded-xl border border-slate-800 p-8 text-slate-400">
-            No projects yet. Create your first AI project.
+            
+{projects.length === 0
+  ? 'No projects yet. Create your first AI project.'
+  : 'No matching projects found. Try adjusting your search or filters.'}
+
           </p>
         ) : (
           <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
-            {projects.map((project) => (
+            {filteredProjects.map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}
           </div>
@@ -83,4 +93,4 @@ export default function Dashboard({
       </section>
     </div>
   )
-}
+}}
