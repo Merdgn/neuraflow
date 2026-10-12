@@ -71,31 +71,16 @@ Install Node.js and npm.
 
 ### Installation
 
-Clone the repository:
+Clone the repository and install dependencies:
 
 ```bash
 git clone https://github.com/Merdgn/neuraflow.git
-```
-
-Navigate into the project directory:
-
-```bash
 cd neuraflow
-```
-
-Install dependencies:
-
-```bash
 npm install
-```
-
-Start the development server:
-
-```bash
 npm run dev
 ```
 
-Open the local URL displayed in your terminal, typically `http://localhost:5173/`.
+Open `http://localhost:5173/` in your browser.
 
 ### Production Build
 
@@ -133,7 +118,6 @@ Data persists across page reloads within the same browser storage context.
 - User authentication and personalized workspaces
 - Project analytics and visual reporting
 - AI-powered project recommendations
-- Import and export functionality
 - Improved accessibility and automated testing
 
 ## 🌐 Live Demo
