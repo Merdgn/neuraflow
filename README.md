@@ -128,7 +128,9 @@ Data persists across page reloads within the same browser storage context.
 
 ## 🌐 Live Demo
 
-Deployment link will be added after publishing the application.
+[🚀 Explore Neuraflow Live](https://neuraflow-ai-hub.netlify.app/)
+
+Neuraflow is deployed on Netlify with continuous deployment from the GitHub main branch.
 
 ## 👩‍💻 Development
 
